@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  platform: MyString
+  bundleIdentifier: MyString
+  version: MyString
+  build: MyString
+  app_id: 
+
+two:
+  platform: MyString
+  bundleIdentifier: MyString
+  version: MyString
+  build: MyString
+  app_id: 

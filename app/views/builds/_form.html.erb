@@ -1,0 +1,38 @@
+<%= form_for(@build) do |f| %>
+  <% if @build.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@build.errors.count, "error") %> prohibited this build from being saved:</h2>
+
+      <ul>
+      <% @build.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :platform %><br>
+    <%= f.text_field :platform %>
+  </div>
+  <div class="field">
+    <%= f.label :bundleIdentifier %><br>
+    <%= f.text_field :bundleIdentifier %>
+  </div>
+  <div class="field">
+    <%= f.label :version %><br>
+    <%= f.text_field :version %>
+  </div>
+  <div class="field">
+    <%= f.label :build %><br>
+    <%= f.text_field :build %>
+  </div>
+  <div class="field">
+    <%= f.select :app_id, options_for_select(App.all.map{|s|[s.name, s.id]}) %>
+  </div>
+
+  <%= f.file_field :package %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Builds</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Platform</th>
+      <th>Bundleidentifier</th>
+      <th>Version</th>
+      <th>Build</th>
+      <th>App</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @builds.each do |build| %>
+      <tr>
+        <td><%= build.platform %></td>
+        <td><%= build.bundleIdentifier %></td>
+        <td><%= build.version %></td>
+        <td><%= build.build %></td>
+        <td><%= build.app %></td>
+        <td><%= link_to 'Show', build %></td>
+        <td><%= link_to 'Edit', edit_build_path(build) %></td>
+        <td><%= link_to 'Destroy', build, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Build', new_build_path %>
