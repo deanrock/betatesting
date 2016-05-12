@@ -29,6 +29,9 @@ gem 'omniauth'
 gem 'omniauth-gitlab'
 
 gem "paperclip", "~> 5.0.0.beta1"
+gem 'rqrcode'
+gem 'read_ipa'
+gem 'slack-ruby-client'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

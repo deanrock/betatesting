@@ -1,5 +1,29 @@
 class BuildsController < ApplicationController
-  before_action :set_build, only: [:show, :edit, :update, :destroy]
+  before_action :set_build, only: [:show, :update, :destroy]
+
+  def welcome_public
+
+  end
+
+  # GET /b/:key
+  def show_public
+    @build = Build.find_by_key!(params[:key])
+
+    @mobile = mobile_device?
+  end
+
+  # GET /b/:key/manifest.plist
+  def manifest_public
+    @build = Build.find_by_key!(params[:key])
+
+    render :layout => false
+  end
+
+  # GET /b/:key/app.ipa
+  def app_public
+    @build = Build.find_by_key!(params[:key])
+    send_file @build.package.path, :type => @build.package_content_type, :disposition => 'inline'
+  end
 
   # GET /builds
   # GET /builds.json
@@ -10,16 +34,19 @@ class BuildsController < ApplicationController
   # GET /builds/1
   # GET /builds/1.json
   def show
+    redirect_to action: 'show_public', key: @build.key
+  end
+
+  # GET /builds/1/reimport
+  def reimport
+    @build = Build.find_by_id(params[:id])
+    @build.import
+    redirect_to @build
   end
 
   # GET /builds/new
   def new
     @build = Build.new
-  end
-
-  # GET /builds/1/edit
-  def edit
-
   end
 
   # POST /builds
@@ -29,24 +56,17 @@ class BuildsController < ApplicationController
 
     respond_to do |format|
       if @build.save
-        format.html { redirect_to @build, notice: 'Build was successfully created.' }
-        format.json { render :show, status: :created, location: @build }
+
+        if @build.import
+          format.html { redirect_to @build, notice: 'Build was successfully created.' }
+          format.json { render :show, status: :created, location: @build }
+        else
+          @build.delete
+          format.html { render :new, notice: 'Error while importing.' }
+          format.json { render json: { 'error': 'Error while importing.' }, status: :unprocessable_entity }
+        end
       else
         format.html { render :new }
-        format.json { render json: @build.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /builds/1
-  # PATCH/PUT /builds/1.json
-  def update
-    respond_to do |format|
-      if @build.update(build_params)
-        format.html { redirect_to @build, notice: 'Build was successfully updated.' }
-        format.json { render :show, status: :ok, location: @build }
-      else
-        format.html { render :edit }
         format.json { render json: @build.errors, status: :unprocessable_entity }
       end
     end
@@ -70,6 +90,6 @@ class BuildsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def build_params
-      params.require(:build).permit(:platform, :bundleIdentifier, :version, :build, :app_id, :package)
+      params.require(:build).permit(:package)
     end
 end

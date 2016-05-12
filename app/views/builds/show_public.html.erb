@@ -1,0 +1,52 @@
+<div class="wrapper">
+    <div class="header">
+    <%= @build.app.name %>
+    </div>
+    <div class="content">
+        <p id="notice"><%= notice %></p>
+
+        <div class="title">Info</div>
+        <div class="clearfix line property-box">
+            <div class="property"><%= @build.app.name %></div>
+        </div>
+        <div class="clearfix line property-box">
+            <div class="property">Version</div>
+            <div class="value"><%= @build.version %></div>
+        </div>
+        <div class="clearfix line property-box">
+            <div class="property">Build</div>
+            <div class="value"><%= @build.build %></div>
+        </div>
+      <div class="line"></div>
+
+      <div class="title">Download</div>
+      <a class="line download-box" href="itms-services://?action=download-manifest&url=<%= request.base_url %>/b/<%= @build.key %>/manifest.plist">Download application</a>
+      <% if not @mobile %>
+          <div class="clearfix line property-box">
+            Please open this page in Safari on your iOS device to be able to install this application.
+          </div>
+          <div class="property-box" style="text-align: center">
+            <%= raw(@build.get_qr(request.original_url)) %>
+          </div>
+      <% end%>
+      <div class="line"></div>
+
+      <div class="title">Details</div>
+      <div class="clearfix line property-box">
+        <div class="property">Platform</div>
+        <div class="value"><%= @build.app.platform %></div>
+      </div>
+      <div class="clearfix line property-box">
+        <div class="property">Identifier</div>
+        <div class="value"><%= @build.app.identifier %></div>
+      </div>
+
+      <% if user_signed_in? %>
+          <div class="title">Manage</div>
+          <a class="line download-box" href="<%= reimport_build_path(@build) %>">Re-import</a>
+          <%= link_to 'Destroy', @build, :class => "line download-box", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <a class="line download-box" href="<%= builds_path %>">Back</a>
+          <div class="line"></div>
+      <% end %>
+    </div>
+</div>

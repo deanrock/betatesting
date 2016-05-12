@@ -11,16 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160511113343) do
+ActiveRecord::Schema.define(version: 20160512103559) do
 
   create_table "apps", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "identifier"
+    t.string   "platform"
   end
 
   create_table "builds", force: :cascade do |t|
-    t.string   "platform"
     t.string   "bundleIdentifier"
     t.string   "version"
     t.string   "build"
@@ -31,6 +32,8 @@ ActiveRecord::Schema.define(version: 20160511113343) do
     t.string   "package_content_type"
     t.integer  "package_file_size"
     t.datetime "package_updated_at"
+    t.string   "key"
+    t.string   "qr_cache"
   end
 
   add_index "builds", ["app_id"], name: "index_builds_on_app_id"

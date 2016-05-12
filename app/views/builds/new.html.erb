@@ -1,5 +1,37 @@
-<h1>New Build</h1>
+<div class="wrapper">
+  <div class="header">
+    Upload application
+  </div>
+  <div class="content">
+    <p id="notice"><%= notice %></p>
 
-<%= render 'form' %>
+    <%= form_for(@build) do |f| %>
+        <% if @build.errors.any? %>
+              <div class="title"><%= pluralize(@build.errors.count, "error") %> prohibited this build from being saved:</div>
 
-<%= link_to 'Back', builds_path %>
+                <% @build.errors.full_messages.each do |message| %>
+                    <div class="clearfix line property-box" style="color:red">
+                      <%= message %>
+                    </div>
+                <% end %>
+            <div class="line"></div>
+        <% end %>
+
+        <div class="title">Select .ipa file</div>
+        <div class="clearfix line property-box">
+          <div class="property">File</div>
+          <div class="value"><%= f.file_field :package %></div>
+        </div>
+        <a class="line download-box upload" href="#">Upload</a>
+    <% end %>
+
+    <div class="title">Manage</div>
+        <%= link_to 'Back', builds_path, { :class => "line download-box" } %>
+        <div class="line"></div>
+  </div>
+</div>
+<script>
+  $('.upload').click(function(){
+          $(this).parent().submit();
+  });
+</script>

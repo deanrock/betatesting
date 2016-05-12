@@ -1,9 +1,25 @@
 Rails.application.routes.draw do
   resources :builds
+  get 'builds/:id/reimport' => 'builds#reimport', as: :reimport_build
   resources :apps
-  devise_for :users, :controllers => { :omniauth_callbacks => "callbacks" }
+  devise_for :users, :controllers => { :omniauth_callbacks => "callbacks",
+                                       :registrations => "auth/registrations",
+                                       :passwords => 'auth/passwords',
+                                       :sessions => 'auth/sessions' }
   resources :builds
-  root 'builds#index'
+  root 'builds#welcome_public'
+
+  get 'b/:key' => 'builds#show_public'
+  get 'b/:key/manifest.plist' => 'builds#manifest_public'
+  get 'b/:key/app.ipa' => 'builds#app_public'
+
+  #api
+  namespace :api do
+    namespace :v1 do
+      post 'upload' => 'upload#upload'
+    end
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
