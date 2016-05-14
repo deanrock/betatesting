@@ -2,7 +2,7 @@ class BuildsController < ApplicationController
   before_action :set_build, only: [:show, :update, :destroy]
 
   def welcome_public
-
+    redirect_to :builds if current_user
   end
 
   # GET /b/:key
