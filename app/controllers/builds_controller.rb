@@ -31,6 +31,17 @@ class BuildsController < ApplicationController
     @builds = Build.all.order('-id')
   end
 
+  def reimport_all
+    @builds = Build.all.order('-id')
+
+    for build in @builds
+      build.import
+    end
+
+    flash.notice = 'Builds successfully re-imported.'
+    redirect_to :root
+  end
+
   # GET /builds/1
   # GET /builds/1.json
   def show

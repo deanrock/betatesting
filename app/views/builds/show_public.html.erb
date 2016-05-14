@@ -41,6 +41,15 @@
         <div class="value"><%= @build.app.identifier %></div>
       </div>
 
+      <% if @build %>
+          <div class="title">Provisioned devices</div>
+        <% for device in @build.profile['data']['ProvisionedDevices'] %>
+            <div class="clearfix line property-box">
+            <div class="value"><%= device %></div>
+            </div>
+        <% end %>
+      <% end %>
+
       <% if user_signed_in? %>
           <div class="title">Manage</div>
           <a class="line download-box" href="<%= reimport_build_path(@build) %>">Re-import</a>

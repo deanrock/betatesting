@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
+
+  post 'builds/reimport-all' => 'builds#reimport_all', as: :reimport_all_builds
   resources :builds
   get 'builds/:id/reimport' => 'builds#reimport', as: :reimport_build
+
   resources :apps
   devise_for :users, :controllers => { :omniauth_callbacks => "callbacks",
                                        :registrations => "auth/registrations",

@@ -19,6 +19,14 @@ class Build < ActiveRecord::Base
     return self.qr_cache
   end
 
+  def ipa_file
+    JSON.parse(self.ipa_file_content)
+  end
+
+  def profile
+    JSON.parse(self.profile_content)
+  end
+
   def import
     # parse ios app
     platform = 'ios'
@@ -36,6 +44,9 @@ class Build < ActiveRecord::Base
     plist = '<plist version="1.0">' + ipa_file.mobile_provision_file.to_s.split("<plist version=\"1.0\">")[1].split("</plist>")[0] + '</plist>'
 
     profile = ProvisionProfile::ProvisionProfileParser.new(plist)
+
+    self.ipa_file_content = ipa_file.plist.to_json
+    self.profile_content = profile.to_json
 
     if not self.app
       # find or create new app
