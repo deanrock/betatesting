@@ -41,7 +41,7 @@
         <div class="value"><%= @build.app.identifier %></div>
       </div>
 
-      <% if @build %>
+      <% if @build and @build.profile['data']['ProvisionedDevices'] %>
           <div class="title">Provisioned devices</div>
         <% for device in @build.profile['data']['ProvisionedDevices'] %>
             <div class="clearfix line property-box">
