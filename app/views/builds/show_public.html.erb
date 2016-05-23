@@ -20,10 +20,18 @@
       <div class="line"></div>
 
       <div class="title">Download</div>
-      <a class="line download-box" href="itms-services://?action=download-manifest&url=<%= request.base_url %>/b/<%= @build.key %>/manifest.plist">Download application</a>
+      <% if @build.app.platform == 'android' %>
+          <a class="line download-box" href="<%= request.base_url %>/b/<%= @build.key %>/app.ipa">Download application</a>
+    <% else %>
+        <a class="line download-box" href="itms-services://?action=download-manifest&url=<%= request.base_url %>/b/<%= @build.key %>/manifest.plist">Download application</a>
+      <% end %>
       <% if not @mobile %>
           <div class="clearfix line property-box">
-            Please open this page in Safari on your iOS device to be able to install this application.
+            <% if @build.app.platform == 'android' %>
+                Please open this page on your Android device to be able to install this application.
+            <% else %>
+                Please open this page in Safari on your iOS device to be able to install this application.
+            <% end %>
           </div>
           <div class="property-box" style="text-align: center">
             <%= raw(@build.get_qr(request.original_url)) %>
@@ -41,7 +49,7 @@
         <div class="value"><%= @build.app.identifier if @build.app %></div>
       </div>
 
-      <% if @build and @build.profile['data']['ProvisionedDevices'] %>
+      <% if @build and @build.profile and  @build.profile['data']['ProvisionedDevices'] %>
           <div class="title">Provisioned devices</div>
         <% for device in @build.profile['data']['ProvisionedDevices'] %>
             <div class="clearfix line property-box">

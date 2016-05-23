@@ -33,6 +33,9 @@ gem 'rqrcode'
 gem 'read_ipa'
 gem 'slack-ruby-client'
 
+gem 'apktools'
+gem 'nokogiri'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

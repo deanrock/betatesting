@@ -24,38 +24,57 @@ class Build < ActiveRecord::Base
   end
 
   def profile
-    JSON.parse(self.profile_content)
+    JSON.parse(self.profile_content) unless not self.profile_content
   end
 
   def import
-    # parse ios app
-    platform = 'ios'
+    self.app = nil
 
-    # read ipa_file
-    ipa_file = ReadIpa::IpaFile.new(self.package.path)
+    if self.package.path.end_with? '.apk'
+      # parse android app
+      platform = 'android'
 
-    identifier = ipa_file.plist['CFBundleIdentifier']
-    name = ipa_file.plist['CFBundleName']
+      # read apk file
+      require 'apktools/apkxml'
+      apk_file = ApkXml.new(self.package.path)
 
-    self.version = ipa_file.plist['CFBundleShortVersionString']
-    self.build = ipa_file.plist['CFBundleVersion']
+      doc = Nokogiri::XML.parse(apk_file.parse_xml("AndroidManifest.xml", false, true))
 
-    # read mobile provision file
-    plist = '<plist version="1.0">' + ipa_file.mobile_provision_file.to_s.split("<plist version=\"1.0\">")[1].split("</plist>")[0] + '</plist>'
+      identifier = doc.xpath('manifest/@package').to_s
+      name = doc.xpath('manifest/application/@android:label').to_s
 
-    profile = ProvisionProfile::ProvisionProfileParser.new(plist)
+      self.version = doc.xpath('manifest/@android:versionName').to_s
+      self.build = doc.xpath('manifest/@android:versionCode').to_s.to_i(16)
+    else
+      # parse ios app
+      platform = 'ios'
 
-    self.ipa_file_content = ipa_file.plist.to_json
+      # read ipa_file
+      ipa_file = ReadIpa::IpaFile.new(self.package.path)
 
-    begin
-      self.profile_content = profile.to_json
-    rescue => ex
-      logger.error ex.message
+      identifier = ipa_file.plist['CFBundleIdentifier']
+      name = ipa_file.plist['CFBundleName']
+
+      self.version = ipa_file.plist['CFBundleShortVersionString']
+      self.build = ipa_file.plist['CFBundleVersion']
+
+      # read mobile provision file
+      plist = '<plist version="1.0">' + ipa_file.mobile_provision_file.to_s.split("<plist version=\"1.0\">")[1].split("</plist>")[0] + '</plist>'
+
+      profile = ProvisionProfile::ProvisionProfileParser.new(plist)
+
+      self.ipa_file_content = ipa_file.plist.to_json
 
       begin
-        self.profile_content = profile.to_json(:except => 'Entitlements')
+        self.profile_content = profile.to_json
       rescue => ex
         logger.error ex.message
+
+        begin
+          self.profile_content = profile.to_json(:except => 'Entitlements')
+        rescue => ex
+          logger.error ex.message
+        end
       end
     end
 
