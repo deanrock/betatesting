@@ -1,13 +1,13 @@
 <div class="wrapper">
     <div class="header">
-    <%= @build.app.name %>
+    <%= @build.app.name if @build.app %>
     </div>
     <div class="content">
         <p id="notice"><%= notice %></p>
 
         <div class="title">Info</div>
         <div class="clearfix line property-box">
-            <div class="property"><%= @build.app.name %></div>
+            <div class="property"><%= @build.app.name if @build.app %></div>
         </div>
         <div class="clearfix line property-box">
             <div class="property">Version</div>
@@ -34,11 +34,11 @@
       <div class="title">Details</div>
       <div class="clearfix line property-box">
         <div class="property">Platform</div>
-        <div class="value"><%= @build.app.platform %></div>
+        <div class="value"><%= @build.app.platform if @build.app %></div>
       </div>
       <div class="clearfix line property-box">
         <div class="property">Identifier</div>
-        <div class="value"><%= @build.app.identifier %></div>
+        <div class="value"><%= @build.app.identifier if @build.app %></div>
       </div>
 
       <% if @build and @build.profile['data']['ProvisionedDevices'] %>
