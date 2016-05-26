@@ -64,18 +64,7 @@ class Build < ActiveRecord::Base
       profile = ProvisionProfile::ProvisionProfileParser.new(plist)
 
       self.ipa_file_content = ipa_file.plist.to_json
-
-      begin
-        self.profile_content = profile.to_json
-      rescue => ex
-        logger.error ex.message
-
-        begin
-          self.profile_content = profile.to_json(:except => 'Entitlements')
-        rescue => ex
-          logger.error ex.message
-        end
-      end
+      self.profile_content = profile.to_json
     end
 
     if not self.app
