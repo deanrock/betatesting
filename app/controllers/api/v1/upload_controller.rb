@@ -27,7 +27,15 @@ class Api::V1::UploadController < Api::V1::BaseController
 
     if params[:slack_channel]
       client = Slack::Web::Client.new
-      client.chat_postMessage(channel: params[:slack_channel], text: 'Build *' + @build.version + ' (' + @build.build + ')* for *' + @build.app.name + ' [' + @build.app.platform + ']* is available at: ' + @url, username: 'Build Bot')
+
+      branch_text = ''
+
+      if @build.branch
+        branch_text = ', ' + @build.branch
+      end
+
+      text = 'Build *' + @build.version + ' (' + @build.build + ')* for *' + @build.app.name + ' [' + @build.app.platform + branch_text + ']* is available at: ' + @url
+      client.chat_postMessage(channel: params[:slack_channel], text: text, username: 'Build Bot')
     end
 
     render :json => { :status => 'OK', :url => @url }
