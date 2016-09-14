@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160514143701) do
+ActiveRecord::Schema.define(version: 20160914190721) do
 
   create_table "apps", force: :cascade do |t|
     t.string   "name"
@@ -36,6 +36,9 @@ ActiveRecord::Schema.define(version: 20160514143701) do
     t.string   "qr_cache"
     t.string   "ipa_file_content"
     t.string   "profile_content"
+    t.string   "branch"
+    t.string   "commit"
+    t.string   "repo_url"
   end
 
   add_index "builds", ["app_id"], name: "index_builds_on_app_id"

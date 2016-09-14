@@ -17,6 +17,18 @@
             <div class="property">Build</div>
             <div class="value"><%= @build.build %></div>
         </div>
+        <% if @build.branch %>
+          <div class="clearfix line property-box">
+          <div class="property">Branch</div>
+          <div class="value"><%= @build.branch %></div>
+          </div>
+        <% end %>
+        <% if @build.commit and @build.repo_url %>
+            <div class="clearfix line property-box">
+            <div class="property">Commit</div>
+            <div class="value"><a class="link" href="<%= @build.repo_url %>/commit/<%= @build.commit %>"><%= @build.commit %></a></div>
+            </div>
+        <% end %>
       <div class="line"></div>
 
       <div class="title">Download</div>

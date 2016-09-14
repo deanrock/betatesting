@@ -6,6 +6,10 @@ class Api::V1::UploadController < Api::V1::BaseController
 
     @build = Build.new(:package => params[:package])
 
+    @build.branch = params[:branch]
+    @build.commit = params[:commit]
+    @build.repo_url = params[:repo_url]
+
     if @build.save
 
       if @build.import
