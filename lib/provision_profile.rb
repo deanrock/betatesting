@@ -3,6 +3,7 @@ module ProvisionProfile
 
     def initialize(data)
       @data = CFPropertyList::List.new(data: data, format: CFPropertyList::List::FORMAT_AUTO).value.to_rb
+      @data['Entitlements'].map { |x| x[1].value.compact! if x[1] && x[1].value && x[1].value.kind_of?(Array); x }
     end
 
     def uuid
