@@ -21,3 +21,21 @@ development:
   api_token: key-for-uploading-api
 ```
 
+## Testing
+You can test upload API via `curl` command:
+```bash
+curl -F "token=key-for-uploading-api" \
+-F "package=@test.ipa" \
+-F "slack_channel=#ci" \
+-F "branch=staging" \
+-F "commit=24f388298c83beb7507c6aae06b2a389dfca5b01" \
+-F "repo_url=https://gitlab.example.com/examples/test" \
+"http://localhost:3000/api/v1/upload/"
+```
+where:
+* `token` = api_token from config file
+* `package` = file to upload (prepend with `@` for `curl`)
+* `slack_channel` = slack channel where to post URL to the build page
+* `branch` (optional) = branch name
+* `commit` (optional) = commit ID
+* `repo_url` (optional) = gitlab repo url
